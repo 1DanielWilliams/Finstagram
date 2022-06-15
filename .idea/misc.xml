@@ -10,6 +10,7 @@
         <entry key="app/src/main/res/layout/launch_screen.xml" value="0.28348999023437504" />
         <entry key="app/src/main/res/menu/login_menu.xml" value="0.20208333333333334" />
         <entry key="app/src/main/res/menu/main_menu.xml" value="0.20208333333333334" />
+        <entry key="app/src/main/res/xml/fileprovider.xml" value="0.1" />
       </map>
     </option>
   </component>
