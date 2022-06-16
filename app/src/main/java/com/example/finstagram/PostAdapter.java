@@ -1,6 +1,7 @@
 package com.example.finstagram;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,14 +13,19 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.finstagram.Activities.FeedActivity;
+import com.example.finstagram.Activities.PostDetailActivity;
 import com.example.finstagram.Models.Post;
+import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.SaveCallback;
 
 import java.util.List;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     private Context context;
     private List<Post> posts;
+
 
     public PostAdapter(Context context, List<Post> posts) {
         this.context = context;
@@ -36,6 +42,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Post post = posts.get(position);
+        post.position = position;
+        holder.rootView.setTag(post);
         holder.bind(post);
     }
 
@@ -59,15 +67,31 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
 
     class ViewHolder extends RecyclerView.ViewHolder {
+        View rootView;
         private TextView tvPostName;
         private ImageView ivPost;
         private TextView tvDescription;
 
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            rootView = itemView;
             tvPostName = itemView.findViewById(R.id.tvPostName);
             ivPost = itemView.findViewById(R.id.ivPost);
             tvDescription = itemView.findViewById(R.id.tvDescription);
+
+            rootView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        Post post = posts.get(position);
+                        Intent i = new Intent(context, PostDetailActivity.class);
+                        i.putExtra(Post.class.getSimpleName(), post);
+                        context.startActivity(i);
+                    }
+                }
+            });
         }
 
         public void bind(Post post) {
