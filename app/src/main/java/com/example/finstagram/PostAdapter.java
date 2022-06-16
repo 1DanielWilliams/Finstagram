@@ -1,6 +1,7 @@
 package com.example.finstagram;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +44,20 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         return posts.size();
     }
 
+    // Clean all elements of the recycler
+    public void clear() {
+        posts.clear();
+        notifyDataSetChanged();
+    }
+
+    // Add a list of items -- change to type used
+    public void addAll(List<Post> list) {
+        posts.addAll(list);
+        notifyDataSetChanged();
+    }
+
+
+
     class ViewHolder extends RecyclerView.ViewHolder {
         private TextView tvPostName;
         private ImageView ivPost;
@@ -60,6 +75,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             tvPostName.setText(post.getUser().getUsername());
             ParseFile image = post.getImage();
             if (image != null) {
+                Log.i("PostAdapter", "bind: IMAGE LOADED");
+
                 Glide.with(context).load((image.getUrl())).into(ivPost);
 
             }

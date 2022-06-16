@@ -3,6 +3,7 @@ package com.example.finstagram.Activities;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -22,6 +23,7 @@ public class FeedActivity extends AppCompatActivity {
     private RecyclerView rvPost;
     protected List<Post> allPosts;
     protected PostAdapter adapter;
+    private SwipeRefreshLayout swipeContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +38,24 @@ public class FeedActivity extends AppCompatActivity {
         rvPost.setAdapter(adapter);
         rvPost.setLayoutManager(new LinearLayoutManager(this));
         queryPosts();
+
+        swipeContainer = findViewById(R.id.swipeContainer);
+
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                adapter.clear();
+                allPosts.clear();
+                queryPosts();
+                swipeContainer.setRefreshing(false);
+
+            }
+        });
+
+        // Configure the refreshing colors
+        swipeContainer.setColorSchemeResources(android.R.color.holo_red_dark,
+                android.R.color.holo_orange_dark);
+
     }
 
     private void queryPosts() {
