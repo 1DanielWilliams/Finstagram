@@ -2,6 +2,7 @@ package com.example.finstagram;
 
 import android.app.Application;
 
+import com.example.finstagram.Models.Post;
 import com.parse.Parse;
 import com.parse.ParseObject;
 

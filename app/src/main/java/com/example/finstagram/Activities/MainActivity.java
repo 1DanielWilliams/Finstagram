@@ -1,4 +1,4 @@
-package com.example.finstagram;
+package com.example.finstagram.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -8,7 +8,6 @@ import androidx.core.content.FileProvider;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.MediaActionSound;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -22,10 +21,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.finstagram.Models.Post;
+import com.example.finstagram.R;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
     private EditText etDescription;
     private Button btnTakePicture;
+    private Button btnToFeed;
     private ImageView ivPostImage;
     private Button btnSubmit;
     private File photoFile;
@@ -53,6 +54,16 @@ public class MainActivity extends AppCompatActivity {
         btnTakePicture = findViewById(R.id.btnTakePicture);
         ivPostImage = findViewById(R.id.ivPostImage);
         btnSubmit = findViewById(R.id.btnSubmit);
+        btnToFeed = findViewById(R.id.btnToFeed);
+
+        btnToFeed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, FeedActivity.class);
+                startActivity(intent);
+            }
+        });
+
 
         btnTakePicture.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        queryPosts();
+//        queryPosts();
     }
 
     private void launchCamera() {
@@ -151,23 +162,23 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void queryPosts() {
-        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
-        query.include(Post.KEY_USER);
-        query.findInBackground(new FindCallback<Post>() {
-            @Override
-            public void done(List<Post> posts, ParseException e) {
-                if (e != null) {
-                    Log.e("MainActivity", "Issue with getting posts", e);
-                    return;
-                }
-
-                for (Post post : posts) {
-                    Log.i("MainActivity", "Posts: " + post.getDescription() + ", username: " + post.getUser().getUsername());
-                }
-            }
-        });
-    }
+//    private void queryPosts() {
+//        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
+//        query.include(Post.KEY_USER);
+//        query.findInBackground(new FindCallback<Post>() {
+//            @Override
+//            public void done(List<Post> posts, ParseException e) {
+//                if (e != null) {
+//                    Log.e("MainActivity", "Issue with getting posts", e);
+//                    return;
+//                }
+//
+//                for (Post post : posts) {
+//                    Log.i("MainActivity", "Posts: " + post.getDescription() + ", username: " + post.getUser().getUsername());
+//                }
+//            }
+//        });
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
