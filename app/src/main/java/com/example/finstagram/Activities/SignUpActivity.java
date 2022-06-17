@@ -23,6 +23,7 @@ public class SignUpActivity extends AppCompatActivity {
     private Button btnSignUpSubmit;
     private EditText etUsernameSignUp;
     private EditText etPasswordSignUp;
+    private EditText etEmailSignUp;
 
 
     @Override
@@ -34,16 +35,19 @@ public class SignUpActivity extends AppCompatActivity {
         btnSignUpSubmit = findViewById(R.id.btnSignUpSubmit);
         etUsernameSignUp = findViewById(R.id.etUsernameSignUp);
         etPasswordSignUp = findViewById(R.id.etPasswordSignUp);
+        etEmailSignUp = findViewById(R.id.etEmailSignUp);
 
         btnSignUpSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String username = etUsernameSignUp.getText().toString();
                 String password = etPasswordSignUp.getText().toString();
+                String email = etEmailSignUp.getText().toString();
                 ParseUser user = new ParseUser();
                 user.setUsername(username);
-                user.setPassword(username);
-                if (username == "" || password == "") {
+                user.setPassword(password);
+                user.setEmail(email);
+                if (username.equals("") || password.equals("")) {
                     Toast.makeText(SignUpActivity.this, "Cannot have empty fields", Toast.LENGTH_SHORT).show();
                     return;
                 }
