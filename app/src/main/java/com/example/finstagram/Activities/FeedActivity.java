@@ -8,14 +8,17 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.finstagram.EndlessRecyclerViewScrollListener;
 import com.example.finstagram.Models.Post;
 import com.example.finstagram.PostAdapter;
 import com.example.finstagram.R;
 import com.parse.FindCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class FeedActivity extends AppCompatActivity {
@@ -24,6 +27,9 @@ public class FeedActivity extends AppCompatActivity {
     protected List<Post> allPosts;
     protected PostAdapter adapter;
     private SwipeRefreshLayout swipeContainer;
+
+    private EndlessRecyclerViewScrollListener scrollListener;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,9 +42,21 @@ public class FeedActivity extends AppCompatActivity {
         adapter = new PostAdapter(this, allPosts);
 
         rvPost.setAdapter(adapter);
-        rvPost.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        rvPost.setLayoutManager(linearLayoutManager);
         queryPosts();
 
+
+
+        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                Post post = allPosts.get(allPosts.size()-1);
+                loadNextDataFromApi(post.getCreatedAt());
+            }
+        };
+
+        rvPost.addOnScrollListener(scrollListener);
         swipeContainer = findViewById(R.id.swipeContainer);
 
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -58,6 +76,36 @@ public class FeedActivity extends AppCompatActivity {
 
     }
 
+    // Append the next page of data into the adapter
+    // This method probably sends out a network request and appends new data items to your adapter.
+    public void loadNextDataFromApi(Date offset) {
+        // Compare date and query for older dates
+        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
+        query.include(Post.KEY_USER);
+        query.setLimit((20));
+        query.addDescendingOrder("createdAt");
+
+
+        query.whereLessThan("createdAt", offset);
+
+        query.findInBackground(new FindCallback<Post>() {
+            @Override
+            public void done(List<Post> posts, ParseException e) {
+                if (e != null) {
+                    Log.e("FeedActivity", "problem with enedless scrolling", e);
+                }
+
+                allPosts.addAll(posts);
+                adapter.notifyDataSetChanged();
+            }
+        });
+        // Send an API request to retrieve appropriate paginated data
+        //  --> Send the request including an offset value (i.e `page`) as a query parameter.
+        //  --> Deserialize and construct new model objects from the API response
+        //  --> Append the new data objects to the existing set of items inside the array of items
+        //  --> Notify the adapter of the new items made with `notifyItemRangeInserted()`
+    }
+
     private void queryPosts() {
         // Specify the type of data that will be queried
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
@@ -71,16 +119,9 @@ public class FeedActivity extends AppCompatActivity {
         query.findInBackground(new FindCallback<Post>() {
             @Override
             public void done(List<Post> posts, ParseException e) {
-
                 if (e != null) {
-                    Log.e("FeedActivity", "issue with getting posts", e);
                     return;
                 }
-
-                for (Post post : posts) {
-                    Log.i("FeedActivity", "Post: " + post.getDescription() + " , Username: " + post.getUser().getUsername());
-                }
-
                 // Saves the received posts to list and notify the adapter of new data
                 allPosts.addAll(posts);
                 adapter.notifyDataSetChanged();
