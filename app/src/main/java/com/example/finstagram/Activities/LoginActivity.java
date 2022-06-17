@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.finstagram.R;
@@ -22,6 +23,8 @@ public class LoginActivity extends AppCompatActivity {
     Button btnLogin;
     EditText etUsername;
     EditText etPassword;
+    TextView tvSignUp;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +37,18 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         btnLogin = findViewById(R.id.btnLogin);
-        etUsername = findViewById(R.id.etUsername);
-        etPassword = findViewById(R.id.etPassword);
+        etUsername = findViewById(R.id.etUsernameSignUp);
+        etPassword = findViewById(R.id.etPasswordSignUp);
+        tvSignUp = findViewById(R.id.tvSignUp);
+
+        tvSignUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
+                startActivity(intent);
+            }
+        });
+
         onClickLogin();
     }
 
@@ -57,7 +70,6 @@ public class LoginActivity extends AppCompatActivity {
             public void done(ParseUser user, ParseException e) {
                 // Checks if an error was returned from function
                 if (e != null) {
-                    Log.e(TAG, "done: issue with login", e);
                     return;
                 }
 

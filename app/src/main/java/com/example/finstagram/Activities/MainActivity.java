@@ -150,10 +150,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void done(ParseException e) {
                 if (e != null) {
-                    Log.e("MainActivity", "Error while saving", e);
                     Toast.makeText(MainActivity.this, "Error while saving", Toast.LENGTH_SHORT).show();
                 }
-                Log.i("MainActivity", "Post was saved");
                 // Clears out text/image for user
                 etDescription.setText("");
                 ivPostImage.setImageResource(0);

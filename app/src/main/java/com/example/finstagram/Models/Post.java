@@ -18,7 +18,6 @@ public class Post extends ParseObject {
     public static final String KEY_USER = "user";
     public int position;
 
-    // Empty constructor used for parcel
     public Post() {}
 
     public String getDescription() {

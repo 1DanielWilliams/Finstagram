@@ -3,6 +3,7 @@ package com.example.finstagram;
 import android.app.Application;
 
 import com.example.finstagram.Models.Post;
+import com.example.finstagram.Models.User;
 import com.parse.Parse;
 import com.parse.ParseObject;
 
@@ -14,6 +15,8 @@ public  class ParseApplication extends Application {
         super.onCreate();
 
         ParseObject.registerSubclass(Post.class);
+        ParseObject.registerSubclass(User.class);
+
         Parse.initialize(new Parse.Configuration.Builder(this)
                 .applicationId("PrizTK5goSwWNSCu1u0O11OCiHHB5JVlWjIFfakC")
                 .clientKey("4V2jAjQL3Aw9SIaQJ07iMLO0MFKqi93dePmFkGii")
