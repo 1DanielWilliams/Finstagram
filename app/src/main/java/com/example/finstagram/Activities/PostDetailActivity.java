@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.finstagram.Models.Post;
 import com.example.finstagram.R;
+import com.parse.ParseFile;
 import com.parse.ParseUser;
 
 public class PostDetailActivity extends AppCompatActivity {
@@ -24,6 +25,8 @@ public class PostDetailActivity extends AppCompatActivity {
     private TextView tvTimestampDetail;
     private TextView tvNumLikesDetail;
     private TextView tvLikeDetails;
+    private ImageView ivProfileImageDetail;
+    private TextView tvUsernameDetailSmall;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +39,9 @@ public class PostDetailActivity extends AppCompatActivity {
         tvTimestampDetail = findViewById(R.id.tvTimestampDetail);
         tvNumLikesDetail = findViewById(R.id.tvNumLikesDetail);
         tvLikeDetails = findViewById(R.id.tvLikeDetails);
+        ivProfileImageDetail = findViewById(R.id.ivProfileImageDetail);
+        tvUsernameDetailSmall = findViewById(R.id.tvUsernameDetailSmall);
+
 
         if (getIntent().getExtras() != null) {
             Post post = (Post) getIntent().getParcelableExtra(Post.class.getSimpleName());
@@ -49,6 +55,14 @@ public class PostDetailActivity extends AppCompatActivity {
                 tvLikeDetails.setText("Likes");
             } else {
                 tvLikeDetails.setText("Like");
+            }
+
+            tvUsernameDetailSmall.setText(post.getUser().getUsername());
+            ParseFile profileImage = post.getUser().getParseFile("profileImage");
+            if (profileImage != null) {
+                Glide.with(this).load(profileImage.getUrl()).circleCrop().into(ivProfileImageDetail);
+            } else {
+                ivProfileImageDetail.setImageResource(R.drawable.default_profile);
             }
 
         }

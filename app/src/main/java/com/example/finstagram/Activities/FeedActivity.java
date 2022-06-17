@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import com.example.finstagram.EndlessRecyclerViewScrollListener;
 import com.example.finstagram.Models.Post;
@@ -32,6 +34,7 @@ public class FeedActivity extends AppCompatActivity {
     protected List<Post> allPosts;
     protected PostAdapter adapter;
     private SwipeRefreshLayout swipeContainer;
+    private Button btnPost;
 
     private EndlessRecyclerViewScrollListener scrollListener;
 
@@ -51,6 +54,15 @@ public class FeedActivity extends AppCompatActivity {
         rvPost.setLayoutManager(linearLayoutManager);
         queryPosts();
 
+        btnPost = findViewById(R.id.btnPost);
+
+        btnPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(FeedActivity.this, MainActivity.class);
+                startActivity(i);
+            }
+        });
 
 
         scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {

@@ -11,10 +11,10 @@
       android:id="@+id/ivPostDetail"
       android:layout_width="match_parent"
       android:layout_height="167dp"
-      android:layout_marginTop="3dp"
+      android:layout_marginTop="24dp"
       android:scaleType="center"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="1.0"
+      app:layout_constraintHorizontal_bias="0.0"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/tvUsernameDetail"
       tools:srcCompat="@tools:sample/avatars" />
@@ -23,22 +23,20 @@
       android:id="@+id/tvUsernameDetail"
       android:layout_width="92dp"
       android:layout_height="24dp"
-      android:layout_marginTop="16dp"
+      android:layout_marginStart="12dp"
+      android:layout_marginTop="28dp"
       android:text="TextView"
       android:textAppearance="@style/TextAppearance.AppCompat.Large"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.05"
-      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintStart_toEndOf="@+id/ivProfileImageDetail"
       app:layout_constraintTop_toTopOf="parent" />
 
   <TextView
       android:id="@+id/tvTimestampDetail"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:layout_marginStart="24dp"
       android:layout_marginTop="2dp"
       android:text="TextView"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.045"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/ivPostDetail" />
 
@@ -46,20 +44,19 @@
       android:id="@+id/tvDescriptionDetail"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginTop="8dp"
+      android:layout_marginStart="24dp"
+      android:layout_marginTop="14dp"
       android:text="Look at my photo!"
       android:textSize="20sp"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.064"
-      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintStart_toEndOf="@+id/tvUsernameDetailSmall"
       app:layout_constraintTop_toBottomOf="@+id/tvTimestampDetail" />
 
   <TextView
       android:id="@+id/tvNumLikesDetail"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginStart="180dp"
-      android:layout_marginTop="8dp"
+      android:layout_marginStart="40dp"
+      android:layout_marginTop="2dp"
       android:text="2"
       app:layout_constraintStart_toEndOf="@+id/tvTimestampDetail"
       app:layout_constraintTop_toBottomOf="@+id/ivPostDetail" />
@@ -69,8 +66,29 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginStart="4dp"
-      android:layout_marginTop="8dp"
+      android:layout_marginTop="2dp"
       android:text="Likes"
       app:layout_constraintStart_toEndOf="@+id/tvNumLikesDetail"
       app:layout_constraintTop_toBottomOf="@+id/ivPostDetail" />
+
+  <TextView
+      android:id="@+id/tvUsernameDetailSmall"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="24dp"
+      android:layout_marginTop="12dp"
+      android:text="TextView"
+      android:textAppearance="@style/TextAppearance.AppCompat.Large"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/tvTimestampDetail" />
+
+  <ImageView
+      android:id="@+id/ivProfileImageDetail"
+      android:layout_width="59dp"
+      android:layout_height="51dp"
+      android:layout_marginStart="24dp"
+      android:layout_marginTop="16dp"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      tools:srcCompat="@tools:sample/avatars" />
 </androidx.constraintlayout.widget.ConstraintLayout>
