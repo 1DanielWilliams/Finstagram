@@ -22,6 +22,7 @@ import com.example.finstagram.Activities.SignUpActivity;
 import com.example.finstagram.Models.Post;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.util.List;
@@ -78,6 +79,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         private TextView tvUsernameSmall;
         private TextView tvRelativetime;
         private ImageButton btnLikeFeed;
+        private ImageView ivProfileFeed;
 
 
         public ViewHolder(@NonNull View itemView) {
@@ -89,23 +91,20 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             tvRelativetime = itemView.findViewById(R.id.tvRelativetime);
             tvUsernameSmall = itemView.findViewById(R.id.tvUsernameSmall);
             btnLikeFeed = itemView.findViewById(R.id.btnLikeFeed);
+            ivProfileFeed = itemView.findViewById(R.id.ivProfileFeed);
+
 
             btnLikeFeed.setOnClickListener(new View.OnClickListener() {
-
-
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();
                     Post post = posts.get(position);
                     if (post.getIsLiked()) {
-                        //unlike the post
                         post.setLikes(post.getLikes() - 1);
                         post.setIsLiked(false);
 
                     } else{
-                        //like the post
                         post.setIsLiked(true);
-
                         post.setLikes(post.getLikes() + 1);
                     }
 
@@ -147,10 +146,16 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
             }
 
-            ParseFile image = post.getImage();
-            if (image != null) {
-                Glide.with(context).load((image.getUrl())).into(ivPost);
+            ParseFile profileImage = post.getUser().getParseFile("profileImage");
+            if (profileImage != null) {
+                Glide.with(context).load(profileImage.getUrl()).into(ivProfileFeed);
+            } else {
+                ivProfileFeed.setImageResource(R.drawable.default_profile);
+            }
 
+            ParseFile postImage = post.getImage();
+            if (postImage != null) {
+                Glide.with(context).load((postImage.getUrl())).into(ivPost);
             }
         }
     }

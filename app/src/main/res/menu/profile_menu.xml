@@ -3,9 +3,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/addProfilePic"
-        android:title="Change profile photo" />
+        android:id="@+id/menuFeedProfile"
+        android:title="Feed" />
     <item
-        android:id="@+id/menuLogout"
+        android:id="@+id/menuLogoutProfile"
         android:title="LOGOUT" />
 </menu>

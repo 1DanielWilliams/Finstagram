@@ -70,6 +70,10 @@ public class PostDetailActivity extends AppCompatActivity {
                 Intent i = new Intent(this, LoginActivity.class);
                 startActivity(i);
                 return true;
+            case R.id.addProfilePic:
+                i = new Intent(this, ProfilePictureActivity.class);
+                startActivity(i);
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }

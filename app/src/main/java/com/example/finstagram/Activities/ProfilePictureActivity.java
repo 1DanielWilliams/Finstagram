@@ -17,77 +17,54 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.finstagram.Models.Post;
+import com.bumptech.glide.Glide;
+import com.example.finstagram.Models.User;
 import com.example.finstagram.R;
-import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class ProfilePictureActivity extends AppCompatActivity {
 
-    public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 42;
+    public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 41;
 
-    private EditText etDescription;
-    private Button btnTakePicture;
-    private Button btnToFeed;
-    private ImageView ivPostImage;
-    private Button btnSubmit;
+
+    private TextView tvUsernameProfile;
+    private ImageView ivCreateProfileImage;
+    private Button btnTakeProfilePic;
     private File photoFile;
     private String photoFileName = "photo.jpg";
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_profile_picture);
+        tvUsernameProfile = findViewById(R.id.tvUsernameProfile);
+        ivCreateProfileImage = findViewById(R.id.ivCreateProfileImage);
+        btnTakeProfilePic = findViewById(R.id.btnTakeProfilePic);
 
-        etDescription = findViewById(R.id.etDescription);
-        btnTakePicture = findViewById(R.id.btnTakePicture);
-        ivPostImage = findViewById(R.id.ivPostImage);
-        btnSubmit = findViewById(R.id.btnSubmit);
-        btnToFeed = findViewById(R.id.btnToFeed);
+        ParseUser user = ParseUser.getCurrentUser();
+        tvUsernameProfile.setText(user.getUsername());
+        ParseFile image = user.getParseFile("profileImage");
+        if (image != null){
+            Glide.with(this).load(image.getUrl()).into(ivCreateProfileImage);
+        } else {
+            ivCreateProfileImage.setImageResource(R.drawable.default_profile);
+        }
 
-        btnToFeed.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, FeedActivity.class);
-                startActivity(intent);
-            }
-        });
-
-
-        btnTakePicture.setOnClickListener(new View.OnClickListener() {
+        btnTakeProfilePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 launchCamera();
-            }
-        });
-
-        btnSubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String description = etDescription.getText().toString();
-                if (description.isEmpty()) {
-                    Toast.makeText(MainActivity.this, "Description cannot be empty", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                if (photoFile == null && ivPostImage.getDrawable() == null) {
-                    Toast.makeText(MainActivity.this, "There is no Image!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                ParseUser currentUser = ParseUser.getCurrentUser();
-                savePost(description, currentUser, photoFile);
             }
         });
 
@@ -97,8 +74,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
         photoFile = getPhotoFileUri(photoFileName);
-
-        Uri fileProvider = FileProvider.getUriForFile(MainActivity.this, "com.codepath.fileprovider", photoFile);
+        Uri fileProvider = FileProvider.getUriForFile(ProfilePictureActivity.this, "com.codepath.fileprovider", photoFile);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
 
         if (intent.resolveActivity(getPackageManager()) != null) {
@@ -115,7 +91,19 @@ public class MainActivity extends AppCompatActivity {
                 Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
                 // RESIZE BITMAP, see section below
                 // Load the taken image into a preview
-                ivPostImage.setImageBitmap(takenImage);
+                ivCreateProfileImage.setImageBitmap(takenImage);
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                takenImage.compress(Bitmap.CompressFormat.PNG,100,stream);
+                byte[] byteArray = stream.toByteArray();
+                ParseFile parseFile = new ParseFile(photoFileName, byteArray);
+                ParseUser user = ParseUser.getCurrentUser();
+                user.put(User.KEY_PROFILE_IMAGE, parseFile);
+
+                try {
+                    user.save();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             } else { // Result was a failure
                 Toast.makeText(this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
             }
@@ -135,31 +123,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Return the file target for the photo based on filename
-         return new File(mediaStorageDir.getPath() + File.separator + fileName);
-    }
-
-    private void savePost(String description, ParseUser currentUser, File photoFile) {
-        Post post = new Post();
-        post.setDescription(description);
-        post.setImage(new ParseFile(photoFile));
-        post.setUser(currentUser);
-        post.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if (e != null) {
-                    Toast.makeText(MainActivity.this, "Error while saving", Toast.LENGTH_SHORT).show();
-                }
-                // Clears out text/image for user
-                etDescription.setText("");
-                ivPostImage.setImageResource(0);
-            }
-        });
-
+        return new File(mediaStorageDir.getPath() + File.separator + fileName);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu, menu);
+        getMenuInflater().inflate(R.menu.profile_menu, menu);
         return true;
     }
 
@@ -167,19 +136,16 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         Intent i;
         switch (item.getItemId()) {
-            case R.id.menuLogout:
+            case R.id.menuLogoutProfile:
                 ParseUser.logOut();
-                i = new Intent(this, LoginActivity.class);
+                 i = new Intent(this, LoginActivity.class);
                 startActivity(i);
                 return true;
-            case R.id.addProfilePic:
-                i = new Intent(this, ProfilePictureActivity.class);
+            case R.id.menuFeedProfile:
+                i = new Intent(this, FeedActivity.class);
                 startActivity(i);
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
-
-
-
 }

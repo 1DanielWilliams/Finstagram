@@ -13,19 +13,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvPostName"
+        app:layout_constraintTop_toBottomOf="@+id/ivProfileFeed"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
         android:id="@+id/tvPostName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
         android:text="Daniel"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/ivProfileFeed"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -76,4 +76,14 @@
         app:layout_constraintStart_toEndOf="@+id/tvDescription"
         app:layout_constraintTop_toBottomOf="@+id/ivPost"
         tools:srcCompat="@drawable/ic_vector_heart_stroke" />
+
+    <ImageView
+        android:id="@+id/ivProfileFeed"
+        android:layout_width="38dp"
+        android:layout_height="39dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="5dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/avatars" />
 </androidx.constraintlayout.widget.ConstraintLayout>
