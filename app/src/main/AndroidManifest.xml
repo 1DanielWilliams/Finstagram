@@ -26,6 +26,9 @@
         android:theme="@style/Theme.Finstagram"
         tools:targetApi="31">
         <activity
+            android:name=".Activities.ProfilePicture"
+            android:exported="false" />
+        <activity
             android:name=".Activities.SignUpActivity"
             android:exported="false" />
         <activity

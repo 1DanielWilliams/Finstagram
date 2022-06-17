@@ -1,12 +1,16 @@
 package com.example.finstagram.Activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.example.finstagram.EndlessRecyclerViewScrollListener;
 import com.example.finstagram.Models.Post;
@@ -16,6 +20,7 @@ import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -128,5 +133,24 @@ public class FeedActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.menuLogout:
+                ParseUser.logOut();
+                Intent i = new Intent(this, LoginActivity.class);
+                startActivity(i);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
